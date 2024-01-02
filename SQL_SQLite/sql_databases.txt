@@ -1,0 +1,678 @@
+SQL Databases Notepad
+Welcome to the SQL Databases Notepad! 
+This comprehensive guide provides general knowledge 
+about SQL, featuring discussions on various database 
+concepts. The notepad covers queries, results, 
+and insights into three databases: favs_0.db, 
+shows.db, and northwind.db.
+
+Contents
+-- favs_0.db: Explore practical examples and queries 
+related to this database.
+-- shows.db: Gain insights into the structure and 
+content of this database.
+
+-- northwind.db: Discover key aspects and queries 
+within this database.
+
+Overview
+This notepad serves as a valuable resource for SQL 
+enthusiasts, offering complete queries along with 
+their results. While some topics may be repeated 
+for reinforcement, we encourage you to go through 
+the entire file to deepen your understanding of 
+SQL databases.
+
+The bult of tasks have been done on the northwind.db 
+database.
+
+I would like to acknowledge David Malan and 
+Benedict Ndigirigi for theeir insights. 
+
+Feel free to explore and enhance your SQL knowledge 
+with this comprehensive notepad. Happy learning!
+
+
+# RELATIONAL DATABASE 
+SQL - Structured Query Language
+
+CRUD 
+C - create,     insert 
+R - read
+Update
+Delete - Drop 
+
+- Delete removes one or more rows
+DELETE FROM table_name WHERE condition;
+
+- Drop removes an entire database, 
+table or other database objects such as views, 
+ndexes etc
+DROP TABLE table_name;
+
+1. favs_0.db
+
+# Converting a .csv file to a .db
+
+$sqlite3 favs_0.db
+# Opens SQLite command-line interface and 
+connects to the SQLite database named favs_0.db
+
+sqlite> .mode csv
+# converts mode to csv
+
+sqlite> .import favs_0.csv favs
+# imports favs_0.csv and makes it favs table
+
+sqlite> .schema 
+CREATE TABLE IF NOT EXISTS "favs" (
+    "item" TEXT. "price" TEXT, "quantity" TEXT
+);
+
+# This command will show you the SQL statements for
+creating all tables, indexes, and views in the 
+current SQLite database.
+
+VIEWS
+# -- Creating a view named 'expensive_items' that 
+includes items with a price greater than 100
+
+CREATE VIEW expensive_items AS
+SELECT *
+FROM favs
+WHERE price > 100;
+ 
+# After creating a view you can query it like a 
+table.  
+
+-- Querying the 'expensive_items' view
+SELECT * FROM expensive_items;
+
+QUERYING FROM favs TABLE 
+Syntax -- SELECT column(s) FROM table ;
+
+SELECT item FROM favs ;
+# Output 
+Phone
+Laptop
+Cable
+Mouse
+Keyboard
+Charger 
+PhoneMouse
+
+SELECT * FROM favs ; 
+# Select all rows from the table favs 
+
+* is a wildcard that represents all columns,
+
+-- In searches * represents rows 
+
+# The query SELECT * FROM favs; selects 
+all rows and columns from the "favs" table. 
+The asterisk (*) in the SELECT statement is 
+a wildcard character that represents all columns. 
+Therefore, this query retrieves every column 
+for every row in the "favs" table, providing a 
+complete result set of the table's data.
+
+# sqlite> ctrl + l  [clears the terminal ]
+# sqlite> clear  also [clears the terminal]
+
+SQL FUNCTIONS
+AVG
+COUNT
+DISTINCT
+LOWER
+MAX
+MIN
+UPPER 
+
+COUNT 
+SELECT COUNT(*) FROM favs ; 
+
+# Output  
+8
+
+The SQL query SELECT COUNT(*) FROM favs; 
+calculates and returns the count of all 
+rows in the "favs" table. The COUNT(*) 
+function counts the number of rows in the specified 
+table, and in this case, it returns a single value 
+representing the total number of rows in the "favs" 
+table.
+
+DISTINCT 
+SELECT DISTINCT(item)FROM favs ;
+
+# Output 
+Phone
+Laptop
+CableMouse
+Keyboard
+Charger 
+
+The SQL query `SELECT DISTINCT(item) FROM favs;`
+retrieves unique values from the "item" column in
+the "favs" table. The `DISTINCT` keyword filters 
+out duplicate values, and it returns a list of unique
+items from the specified column. In this case, 
+it will provide a distinct list of items found in the 
+"favs" table.
+
+Renaming 
+SELECT COUNT(DISTINCT(item)) AS numbers FROM favs ;
+
+# Output
+6
+
+The SQL query SELECT COUNT(DISTINCT(item)) AS numbers 
+FROM favs; calculates the count of unique values in 
+the "item" column of the "favs" table. 
+
+CONDITIONALS
+-- WHERE        (filter) uses single quotes ''
+-- LIKE
+-- ORDER BY     (sorts)
+-- LIMIT
+-- GROUP BY
+
+GROUP BY
+SELECT item COUNT(*) FROM favs GROUP BY ; 
+
+# Output 
+Cable | 1
+Charger | 1
+Keyboard | 1
+Laptop | 1 
+Mouse | 2 
+Phone | 2
+
+GROUP BY  is used to group rows that have the same 
+values in specified columns into summary rows, like 
+in aggregate functions e.g SUM, AVG, COUNT  to perform 
+calculations on each group of rows. e.g. 
+
+SELECT department, AVG(salary) AS average_salary
+FROM employees
+GROUP BY department ;
+
+ORDER BY  is used for sorting results based on one or 
+more columns. It does not affect grouping or summarization 
+of data. It changes how rows are represented e.g.
+
+SELECT * FROM employees
+ORDER BY salary DESC ;
+
+Order by default is ASC  (ascending)
+To reverse use DESC
+
+LIMIT 
+Limits the output to a given number e.g. 
+
+SELECT * FROM favs  WHERE item = 'Phone' LIMIT 1 ; 
+
+-- Selects all rows where item is phone. Displays 
+only one. 
+
+INSERT 
+-- The INSERT statement is used to add 
+new rows (records) to a table.
+
+INSERT INTO favs (item, quantity) 
+VALUES ('Blender', 10) ;
+
+-- To check chnages SELECT * FROM favs ;
+# Output 
+Phone|100|1
+Laptop|1000|3
+Cable|10|5
+Mouse|50|5
+Keyboard|75|5
+Charger|80|6
+Phone|200|4
+Mouse|70|6
+Blender||10   # Blender added 
+
+UPDATE
+-- The UPDATE statement is used to modify existing 
+records in a table.
+
+UPDATE table SET column = value WHERE condition ;
+
+UPDATE favs SET item = 'Hdmi' WHERE item = 'Blender' ;
+
+
+DELETE
+-- The DELETE statement is used to remove one or more 
+rows from a table based on a specified condition.
+
+DELETE FROM table WHERE condition ; 
+
+DELETE FROM favs WHERE item = 'Hdmi' ;
+
+# Deletes Hdmi record (row)
+
+To confirm use: SELECT DISTINCT(item) FROM favs ; 
+
+# Output without Hdmi 
+Phone
+Laptop
+Cable
+Mouse
+Keyboard
+Charger
+Blender
+
+# DELETE FROM favs; will delete all records in 
+the table
+
+2. imdb database 
+shows.db
+
+SQLite DATA TYPES
+-- BLOB     (Binary Large Object)
+-- INTEGER  
+-- NUMERIC (Specially formatted e.g. Date, Time)
+-- TEXT 
+-- REAL 
+
+CONSTRAINTS
+-- NOT NULL (Cannot be NULL)
+-- UNIQUE (Unique e.g. email, social security number)
+
+PRIMARY KEY 
+-- Unique identifier
+
+FOREIGN KEY 
+-- In SQL, a foreign key is a field or a set of fields 
+in a table that refers to the primary key of another 
+table. It establishes a link between the two tables
+based on the values in these key columns. 
+The foreign key constraint is used to ensure 
+referential integrity between the tables e.g. 
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    product_id INT,
+    quantity INT,
+    FOREIGN KEY (product_id) 
+    REFERENCES products(product_id)
+);
+
+-- The orders table has a foreign key named product_id 
+that references the product_id column in the products 
+table.
+-- The FOREIGN KEY constraint ensures that the values 
+in the product_id column of the orders table must exist 
+in the product_id column of the products table.
+
+
+FOREIGN KEY (show_id) REFERENCES shows(id),
+-- Foreign key called 'shows_id' references
+the shows table, id column. 
+
+FOREIGN KEY (person_id) REFERENCES people(id),
+-- Foreign key called 'person_id' references
+the people table, id column.
+
+ENABLE HEADERS
+-- If you want your queries to come with headers on
+sqlite> .headers on 
+
+SELECT COUNT(show_id) FROM genres 
+WHERE genre = 'Comedy' ; 
+
+-- Counts the number of rows in the genres table where 
+the value in the genre column is equal to 'Comedy'.
+
+# Output 
+-- Count(show_id)
+-- 48706
+
+NESTED QUERIES 
+-- Queries within queries. 
+-- Subqueries
+
+SELECT title FROM shows WHERE id IN (SELECT show_id FROM genres WHERE genre = 'Comedy') ;
+-- retrieves the titles of TV shows from the shows 
+table where the corresponding id is 
+found in the result of a subquery. 
+The subquery selects show_id from the genres table 
+for shows that belong to the 'Comedy' genre.
+
+JOIN 
+SELECT * FROM shows JOIN genres On shows.id = genres.show_id WHERE title = 'The Office' ;
+-- performs an INNER JOIN between the "shows" and 
+"genres" tables based on the condition that the "id" 
+column in the "shows" table is equal to the "show_id" 
+column in the "genres" table. The result is filtered 
+to include only rows where the "title" column in the 
+"shows" table is 'The Office'. The SELECT * statement 
+retrieves all columns from both tables for the matching 
+rows.
+
+EXPLICIT JOIN (Using the word Join) 
+
+SELECT title FROM people 
+JOIN stars On people.id = stars.person_id
+JOIN shows ON stars.show_id = show.id
+WHERE name = 'Steve Carell' ;
+
+IMPLICIT JOIN (Without using the word join)
+
+SELECT title FROM people
+WHERE people.id = stars.person_id
+AND stars.show_id = shows.id
+AND name = 'Steve Carell' ; 
+
+WILD CARDS
+SELECT * FROM people WHERE name LIKE 'Steve c%' ;
+
+INDEX 
+-- In SQL, an INDEX is a database object that improves 
+the speed of data retrieval operations on a database 
+table. It is created on one or more columns of a table 
+to provide faster access to the rows, reducing the time 
+required to search and retrieve data. Indexing is 
+crucial for optimizing query performance, especially 
+in large databases.
+
+CREATE INDEX ON shows(title) ;
+-- index breates B-Tress making it faster to search 
+data. 
+-- after creating the index. the search's run time is 
+0.001 from a previous 0.006
+
+
+
+3. Northwind.db 
+-- sqlite> .tables (shows the tables in northwind.db)
+
+# Output 
+Alphabetical list of products   Orders Qry          
+
+Categories                      Product Sales for 1997
+Category Sales for 1997         ProductDetails_V    
+
+Current Product List            Products            
+
+Customer and Suppliers by City  Products Above Average Price
+CustomerCustomerDemo            Products by Category
+
+CustomerDemographics            Quarterly Orders    
+
+Customers                       Regions             
+
+EmployeeTerritories             Sales Totals by Amount
+Employees                       Sales by Category   
+
+Invoices                        Shippers            
+
+Order Details                   Summary of Sales by Quarter
+Order Details Extended          Summary of Sales by Year
+Order Subtotals                 Suppliers           
+
+Orders                          Territories         
+
+SELECT * FROM Order LIMIT 2 ;
+-- Queries all rows from Orders table, 
+displaying the first 2. 
+--The SQL code SELECT * FROM orders LIMIT 2; 
+retrieves the first two rows from the orders table. 
+The LIMIT clause is used to restrict the number of 
+rows returned by a query.
+
+# Output 
+OrderID|CustomerID|EmployeeID|OrderDate|RequiredDate|ShippedDate|ShipVia|Freight|ShipName|ShipAddress|ShipCity|ShipRegion|ShipPostalCode|ShipCountry        
+10248|VINET|5|2016-07-04|2016-08-01|2016-07-16|3|16.75|Vins et alcools Chevalier|59 rue de l-Abbaye|Reims|Western Europe|51100|France
+10249|TOMSP|6|2016-07-05|2016-08-16|2016-07-10|1|22.25|Toms Spezialitäten|Luisenstr. 48|Münster|Western Europe|44087|Germany
+
+SELECT FROM Products WHERE ProductName = 'Chang' ; 
+-- Select fro Products table where Product name is 
+Chang.
+
+# Output
+ProductID|ProductName|SupplierID|CategoryID|QuantityPerUnit|UnitPrice|UnitsInStock|UnitsOnOrder|ReorderLevel|Discontinued
+2|Chang|1|1|24 - 12 oz bottles|19|17|40|25|0 
+
+SELECT * FROM Products ORDER BY SupplierID DESC LIMIT 2; 
+-- The SQL code SELECT * FROM Products 
+ORDER BY SupplierID DESC LIMIT 2; 
+retrieves the top two rows from the Products table, 
+sorted in descending order based on the SupplierID 
+column.
+
+# Output
+ProductID|ProductName|SupplierID|CategoryID|QuantityPerUnit|UnitPrice|UnitsInStock|UnitsOnOrder|ReorderLevel|Discontinued
+61|Sirop d'érable|29|2|24 - 500 ml bottles|28.5|113|0|25|0
+62|Tarte au sucre|29|3|48 pies|49.3|17|0|0|0 
+
+SELECT COUNT(UnitsInStock) FROM Products ;
+-- calculates and returns the count of non-null values 
+in the UnitsInStock column of the Products table.
+
+# Output
+COUNT(UnitsInStock)
+77
+
+EDITING THE OUTPUT HEADER USING 'AS' 
+SELECT COUNT(UnitsInStock) AS Number FROM Products ;
+
+# Output
+Number
+77
+
+SELECT ProductName FROM Products WHERE SupplierID = 20 ; 
+-- retrieves the names of products from the Products 
+table where the SupplierID is equal to 20.
+
+# Output
+ProductName
+-- Singaporean Hokkien Fried Mee
+-- Ipoh Coffee
+-- Gula Malacca
+
+JOIN
+-- In SQL, the JOIN keyword is used to combine rows 
+from two or more tables based on a related column 
+between them. There are different types of joins, 
+including:
+
+1. INNER JOIN 
+-- Returns only the rows where there is a match in 
+both tables.
+
+SELECT *
+FROM table1
+INNER JOIN table2 ON table1.column = table2.column;
+
+2. LEFT JOIN (or LEFT OUTER JOIN)
+-- LEFT JOIN (or LEFT OUTER JOIN): Returns all rows 
+from the left table and the matched rows from the 
+right table. If there is no match, NULL values are 
+returned for columns from the right table.
+
+SELECT *
+FROM table1
+LEFT JOIN table2 ON table1.column = table2.column;
+
+3. RIGHT JOIN (or RIGHT OUTER JOIN)
+-- RIGHT JOIN (or RIGHT OUTER JOIN): Returns all rows 
+from the right table and the matched rows from the 
+left table. If there is no match, NULL values are 
+returned for columns from the left table.
+
+SELECT *
+FROM table1
+RIGHT JOIN table2 ON table1.column = table2.column;
+
+4. FULL JOIN (or FULL OUTER JOIN)
+-- FULL JOIN (or FULL OUTER JOIN): Returns all rows 
+when there is a match in either the left or right table. 
+If there is no match, NULL values are returned for 
+columns from the table without a match.
+
+SELECT *
+FROM table1
+FULL JOIN table2 ON table1.column = table2.column;
+
+5. CROSS JOIN 
+-- CROSS JOIN: Returns the Cartesian product of the 
+two tables, resulting in all possible combinations 
+of rows.
+
+SELECT *
+FROM table1
+CROSS JOIN table2;
+
+# The ON clause specifies the condition for the join. 
+The condition is typically based on the equality of 
+columns in both tables. JOIN operations are fundamental 
+for retrieving data from multiple related tables in a 
+relational database.
+
+SELECT * FROM Product JOIN Orders ON SupplierID ; 
+
+-- Flagged as missing the join condition. Review 
+
+# Output
+ProductID|ProductName|SupplierID|CategoryID|QuantityPerUnit|UnitPrice|UnitsInStock|UnitsOnOrder|ReorderLevel|Discontinued|OrderID|CustomerID|EmployeeID|OrderDate|RequiredDate|ShippedDate|ShipVia|Freight|ShipName|ShipAddress|ShipCity|ShipRegion|ShipPostalCode|ShipCountry
+1|Chai|1|1|10 boxes x 20 bags|18|39|0|10|0|10248|VINET|5|2016-07-04|2016-08-01|2016-07-16|3|16.75|Vins et alcools Chevalier|59 rue de l-Abbaye|Reims|Western Europe|51100|France
+1|Chai|1|1|10 boxes x 20 bags|18|39|0|10|0|10249|TOMSP|6|2016-07-05|2016-08-16|2016-07-10|1|22.25|Toms Spezialitäten|Luisenstr. 48|Münster|Western Europe|44087|Germany
+
+WILD CARDS
+-- % WHEN UNSURE 
+-- OFTEN USED WITH 'LIKE'
+
+SELECT * FROM Products WHERE name LIKE 'Ch%' ;
+
+--The SQL query you provided retrieves all rows from 
+the "Products" table where the "name" column starts 
+with the characters 'Ch'. The '%' symbol is a 
+wildcard character that represents zero or more 
+characters.
+-- So, the query will return all products whose 
+names begin with 'Ch'. For example, it would match 
+names like 'Cheese', 'Chocolate', 'Cherry', etc.
+
+# Output
+ProductID|ProductName|SupplierID|CategoryID|QuantityPerUnit|UnitPrice|UnitsInStock|UnitsOnOrder|ReorderLevel|Discontinued
+1|Chai|1|1|10 boxes x 20 bags|18|39|0|10|0
+2|Chang|1|1|24 - 12 oz bottles|19|17|40|25|0        
+4|Chef Anton's Cajun Seasoning|2|2|48 - 6 oz jars|22|53|0|0|0
+5|Chef Anton's Gumbo Mix|2|2|36 boxes|21.35|0|0|0|1 
+39|Chartreuse verte|18|1|750 cc per bottle|18|69|0|5|0
+48|Chocolade|22|3|10 pkgs.|12.75|15|70|25|0
+
+KEEPING TIMER ON
+-- .timer
+-- Usage : .timer on/Off
+-- .timer on 
+
+INDEXES 
+-- In SQL, an INDEX is a database object that improves 
+the speed of data retrieval operations on a database 
+table. It is created on one or more columns of a table 
+to provide faster access to the rows, reducing the 
+time required to search and retrieve data. Indexing is 
+crucial for optimizing query performance, especially 
+in large databases.
+
+CREATE INDEX index_name
+ON table_name (column1, column2, ...);
+
+CREATE INDEX idx_employee_name
+ON employees (employee_name);
+
+-- Search Products before INDEX
+SELECT ProductName FROM Products LIMIT 2 ;
+
+CREATE INDEX ProductName_index 
+ON Products(ProductName) ;  
+
+-- the query 'SELECT ProductName 
+FROM Products LIMIT 2 ;' now has a 0.001 
+runtime
+
+
+-- run time = 0.006
+ 
+SQL PROBLEMS 
+Race Conditions 
+-- When there are too many requests at the same time.
+-- The code is racing to execute but it is interrupted by other input.
+
+Atomic - either executed at once or not at all. 
+
+A 'LIKES' CODE ON SOCIAL MEDIA
+
+rows = db.execute("SELECT likes FROM posts WHERE id = ?" id);
+likes = rows[0]["likes]
+db.execute("UPDATE posts SET likes = ? WHERE id = ?", likes + 1, id);
+
+SOLVING INCONSISTENCIES 
+-- BEGIN TRANSACTION 
+-- COMMIT 
+-- ROLL BACK
+-- LOCK
+
+SOLUTION (Wrapping with TRANSACT and COMMIT)
+
+db.execute("BEGIN TRANSACTIOPN")
+rows = db.execute("SELECT likes FROM posts WHERE id = ? ", id) ;
+likes = rows [0]["likes"]
+db.execute("UPDATE posts SET lkes = ? WHERE id = ?"  likes + 1, id);
+db.execute("COMMIT")
+
+SOLUTION WITH SQLite
+
+import sqlite3
+
+# Establish a connection to the SQLite database
+conn = sqlite3.connect("your_database.db")
+cursor = conn.cursor()
+
+try:
+    # Begin the transaction
+    conn.execute("BEGIN TRANSACTION")
+
+    # Fetch the current likes from the posts table
+    post_id = 1  # Replace with the actual post ID
+    cursor.execute("SELECT likes FROM posts WHERE id = ?", (post_id,))
+    current_likes = cursor.fetchone()[0]
+
+    # Update the likes count
+    new_likes = current_likes + 1
+    cursor.execute("UPDATE posts SET likes = ? WHERE id = ?", (new_likes, post_id))
+
+    # Commit the transaction
+    conn.commit()
+
+except Exception as e:
+    # Rollback the transaction if an exception occurs
+    print(f"Error: {e}")
+    conn.rollback()
+
+finally:
+    # Close the database connection
+    conn.close()
+
+
+In this code:
+
+-- The BEGIN TRANSACTION statement marks the beginning 
+of a transaction.
+-- The SELECT statement fetches the current likes from the posts table.
+-- The UPDATE statement increments the likes count.
+-- The COMMIT statement commits the changes to the database.
+-- In case of an exception, the ROLLBACK statement is executed to undo any changes and maintain the consistency of the database.
+-- Finally, the database connection is closed.
+-- Adjust the post_id variable with the actual post ID you want to update, and replace "your_database.db" with the name of your SQLite database file.
+
+
+
+
+
+
+
